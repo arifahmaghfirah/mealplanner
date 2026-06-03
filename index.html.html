@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dapur Pintar 🍳</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --deep-teal: #215a6c;
+  --mid-teal: #478a86;
+  --light-teal: #79b4b0;
+  --coral: #ff5757;
+  --dusty-rose: #d2a9a3;
+  --mint: #b7e1cd;
+  --off-white: #f5f5f5;
+  --white: #ffffff;
+  --text: #1a3a42;
+  --text-mid: #478a86;
+  --text-light: #79b4b0;
+  --bg: #f0f8f7;
+  --card: #ffffff;
+  --shadow: 0 2px 16px rgba(33,90,108,0.10);
+  --shadow-lg: 0 6px 32px rgba(33,90,108,0.16);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --sidebar-w: 228px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0; width: var(--sidebar-w);
+  background: var(--deep-teal);
+  display: flex; flex-direction: column;
+  padding: 0; z-index: 200; overflow: hidden;
+}
+.sidebar-logo {
+  padding: 24px 20px 16px;
+  font-family: 'Fredoka One', cursive; font-size: 20px;
+  color: var(--mint); display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.sidebar-logo .logo-icon { font-size: 28px; }
+.sidebar-logo .logo-sub { font-size: 11px; color: var(--light-teal); font-family: 'Nunito', sans-serif; font-weight: 600; }
+.sidebar-nav { flex: 1; overflow-y: auto; padding: 12px 10px; display: flex; flex-direction: column; gap: 2px; }
+.nav-item {
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 12px; border-radius: var(--radius-sm);
+  border: none; cursor: pointer; width: 100%;
+  font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
+  color: rgba(255,255,255,0.55); background: transparent;
+  transition: all 0.18s; text-align: left;
+}
+.nav-item:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.85); }
+.nav-item.active { background: rgba(71,138,134,0.35); color: var(--mint); }
+.nav-item .ni { font-size: 18px; width: 22px; text-align: center; flex-shrink: 0; }
+.nav-section { font-size: 10px; font-weight: 800; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 1px; padding: 14px 14px 4px; }
+
+/* ── MAIN ── */
+.main { margin-left: var(--sidebar-w); min-height: 100vh; }
+.page { display: none; padding: 28px 32px; }
+.page.active { display: block; }
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+.page-title { font-family: 'Fredoka One', cursive; font-size: 26px; color: var(--deep-teal); }
+
+/* ── CARDS ── */
+.card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); }
+.card-pad { padding: 20px 24px; }
+
+/* ── BUTTONS ── */
+.btn { padding: 10px 20px; border-radius: var(--radius-sm); border: none; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; cursor: pointer; transition: all 0.18s; display: inline-flex; align-items: center; gap: 6px; }
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--deep-teal); color: white; }
+.btn-primary:hover { background: #194d5d; box-shadow: 0 4px 16px rgba(33,90,108,0.3); }
+.btn-accent { background: var(--coral); color: white; }
+.btn-accent:hover { background: #e04040; }
+.btn-teal { background: var(--mid-teal); color: white; }
+.btn-teal:hover { background: #3a7a76; }
+.btn-ghost { background: var(--mint); color: var(--deep-teal); }
+.btn-ghost:hover { background: #a4d9c5; }
+.btn-outline { background: transparent; border: 2px solid var(--light-teal); color: var(--mid-teal); }
+.btn-outline:hover { background: var(--mint); }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+.btn-icon { width: 32px; height: 32px; padding: 0; border-radius: 8px; justify-content: center; background: var(--off-white); color: var(--mid-teal); font-size: 14px; }
+.btn-icon:hover { background: var(--mint); }
+
+/* ── FORM ── */
+.form-label { font-size: 12px; font-weight: 800; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 5px; margin-top: 14px; }
+.form-input, .form-select, .form-textarea {
+  width: 100%; border: 2px solid #e0eeed; border-radius: var(--radius-sm);
+  padding: 9px 13px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 600;
+  color: var(--text); background: white; outline: none; transition: border 0.15s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--mid-teal); }
+.form-textarea { resize: vertical; min-height: 80px; }
+
+/* ── CHIPS ── */
+.chip { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 800; border: 2px solid #e0eeed; background: white; color: var(--text-mid); cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+.chip:hover { border-color: var(--mid-teal); color: var(--deep-teal); }
+.chip.active { background: var(--mid-teal); border-color: var(--mid-teal); color: white; }
+.chip-mint { background: var(--mint); border-color: var(--mint); color: var(--deep-teal); }
+.chip-coral { background: #ffe0e0; border-color: #ffb3b3; color: var(--coral); }
+.chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ── BADGES ── */
+.badge { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 3px; }
+.badge-teal { background: var(--mint); color: var(--deep-teal); }
+.badge-coral { background: #ffe0e0; color: var(--coral); }
+.badge-grey { background: var(--off-white); color: #888; }
+.badge-prep { background: #fff3cd; color: #856404; }
+
+/* ── STARS ── */
+.stars { display: inline-flex; gap: 2px; }
+.star { font-size: 14px; cursor: pointer; transition: transform 0.1s; color: #ddd; }
+.star.on { color: #f5b942; }
+.star:hover { transform: scale(1.2); }
+
+/* ── MODAL ── */
+.modal-overlay { position: fixed; inset: 0; background: rgba(33,90,108,0.45); z-index: 500; display: none; align-items: center; justify-content: center; padding: 16px; }
+.modal-overlay.open { display: flex; }
+.modal { background: white; border-radius: 20px; width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(33,90,108,0.28); animation: mIn 0.22s ease; }
+.modal-wide { max-width: 720px; }
+.modal-head { padding: 20px 24px 0; display: flex; align-items: flex-start; justify-content: space-between; }
+.modal-head h3 { font-family: 'Fredoka One', cursive; font-size: 20px; color: var(--deep-teal); }
+.modal-close { background: var(--off-white); border: none; cursor: pointer; width: 30px; height: 30px; border-radius: 8px; font-size: 16px; color: #888; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+.modal-close:hover { background: #e0eeed; }
+.modal-body { padding: 12px 24px 24px; }
+@keyframes mIn { from { transform: scale(0.93) translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ── AI RESULT BOX ── */
+.ai-box { background: #f0f8f7; border: 2px solid var(--mint); border-radius: var(--radius-sm); padding: 14px 16px; font-size: 13.5px; line-height: 1.7; }
+.ai-loading { color: var(--text-light); font-style: italic; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--mint); border-top-color: var(--mid-teal); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+
+/* ── EDITABLE RECIPE FORM ── */
+.recipe-edit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.recipe-edit-grid .full { grid-column: 1/-1; }
+.ingredient-row { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
+.ingredient-row input { flex: 1; }
+.ingredient-row input.qty-input { flex: 0 0 80px; }
+.ingredient-row input.unit-input { flex: 0 0 70px; }
+.step-row { display: flex; gap: 6px; align-items: flex-start; margin-bottom: 6px; }
+.step-num { width: 26px; height: 26px; min-width: 26px; background: var(--mid-teal); color: white; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; margin-top: 8px; }
+.step-row textarea { flex: 1; min-height: 52px; }
+.add-row-btn { font-size: 12px; font-weight: 800; color: var(--mid-teal); background: none; border: none; cursor: pointer; padding: 4px 0; display: flex; align-items: center; gap: 4px; }
+.add-row-btn:hover { color: var(--deep-teal); }
+
+/* ── HOME PAGE ── */
+.home-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 24px; }
+.stat-card { border-radius: var(--radius); padding: 18px 20px; display: flex; align-items: center; gap: 14px; }
+.stat-card.s1 { background: var(--deep-teal); }
+.stat-card.s2 { background: var(--mid-teal); }
+.stat-card.s3 { background: var(--light-teal); }
+.stat-card.s4 { background: var(--dusty-rose); }
+.stat-icon { font-size: 32px; }
+.stat-num { font-family: 'Fredoka One', cursive; font-size: 28px; color: white; }
+.stat-label { font-size: 12px; color: rgba(255,255,255,0.75); font-weight: 700; }
+.today-banner { background: linear-gradient(130deg, var(--deep-teal) 0%, var(--mid-teal) 100%); border-radius: var(--radius); padding: 22px 26px; margin-bottom: 24px; color: white; }
+.today-banner h2 { font-family: 'Fredoka One', cursive; font-size: 18px; margin-bottom: 14px; opacity: 0.9; }
+.today-slots { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+.today-slot { background: rgba(255,255,255,0.12); border-radius: var(--radius-sm); padding: 12px 14px; }
+.today-slot-label { font-size: 11px; font-weight: 800; opacity: 0.7; margin-bottom: 6px; }
+.today-slot-menus { display: flex; flex-direction: column; gap: 4px; }
+.today-slot-menu { font-size: 13px; font-weight: 700; }
+.home-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.sec-title { font-family: 'Fredoka One', cursive; font-size: 16px; color: var(--deep-teal); margin-bottom: 12px; }
+.idea-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.idea-card { border-radius: var(--radius-sm); padding: 12px; cursor: pointer; transition: transform 0.15s; border: 2px solid transparent; }
+.idea-card:hover { transform: translateY(-2px); border-color: var(--light-teal); }
+
+/* ── MEAL PLANNER ── */
+.planner-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.week-nav { display: flex; align-items: center; gap: 8px; }
+.week-btn { width: 32px; height: 32px; border-radius: 8px; border: none; cursor: pointer; background: var(--off-white); color: var(--deep-teal); font-size: 16px; transition: background 0.15s; }
+.week-btn:hover { background: var(--mint); }
+.week-label { font-family: 'Fredoka One', cursive; font-size: 15px; color: var(--deep-teal); min-width: 130px; text-align: center; }
+.planner-wrap { overflow-x: auto; }
+.planner-table { width: 100%; border-collapse: separate; border-spacing: 6px; min-width: 800px; }
+.planner-table .col-label { width: 80px; }
+.day-head { background: var(--deep-teal); color: white; border-radius: var(--radius-sm); padding: 9px 6px; text-align: center; }
+.day-head.today { background: var(--coral); }
+.day-head .dname { font-family: 'Fredoka One', cursive; font-size: 14px; }
+.day-head .ddate { font-size: 10px; opacity: 0.65; margin-top: 2px; }
+.slot-label-cell { text-align: right; padding-right: 8px; font-size: 11px; font-weight: 800; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.4px; white-space: nowrap; vertical-align: top; padding-top: 10px; }
+.plan-cell { background: white; border-radius: var(--radius-sm); padding: 6px; vertical-align: top; min-width: 100px; min-height: 58px; cursor: pointer; border: 2px dashed #e0eeed; transition: all 0.15s; position: relative; }
+.plan-cell:hover { border-color: var(--light-teal); background: #f5fbfa; }
+.plan-cell.has-items { border: 2px solid transparent; box-shadow: var(--shadow); }
+.plan-cell .add-hint { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #ccc; font-size: 20px; opacity: 0; transition: opacity 0.15s; }
+.plan-cell:not(.has-items):hover .add-hint { opacity: 1; }
+.plan-item { background: var(--mint); border-radius: 7px; padding: 4px 7px 4px 7px; margin-bottom: 3px; font-size: 11.5px; font-weight: 700; color: var(--deep-teal); display: flex; align-items: center; gap: 4px; cursor: default; }
+.plan-item.double-src { background: #fff3cd; }
+.plan-item.double-reuse { background: #e8f4e8; }
+.plan-item-del { background: none; border: none; cursor: pointer; color: #aaa; font-size: 12px; margin-left: auto; padding: 0 2px; line-height: 1; }
+.plan-item-del:hover { color: var(--coral); }
+.plan-cal-total { font-size: 10px; color: var(--text-light); font-weight: 700; text-align: right; padding: 2px 2px 0; }
+
+/* ── RECIPE CARDS ── */
+.recipe-toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+.recipe-search { flex: 1; min-width: 180px; }
+.recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+.recipe-card { border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow); }
+.recipe-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.recipe-thumb { height: 130px; display: flex; align-items: center; justify-content: center; font-size: 54px; position: relative; overflow: hidden; }
+.recipe-thumb img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.recipe-thumb .emoji-fallback { position: relative; z-index: 1; }
+.recipe-body { padding: 12px 14px; background: white; }
+.recipe-cat { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--mid-teal); margin-bottom: 3px; }
+.recipe-name { font-family: 'Fredoka One', cursive; font-size: 16px; color: var(--deep-teal); margin-bottom: 6px; line-height: 1.25; }
+.recipe-meta { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+.recipe-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-bottom: 6px; }
+.recipe-tag { font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 5px; background: var(--off-white); color: #666; }
+.recipe-actions { display: flex; gap: 4px; justify-content: flex-end; }
+
+/* ── BAHAN PAGE ── */
+.bahan-added { display: flex; flex-wrap: wrap; gap: 6px; min-height: 36px; padding: 8px; background: var(--off-white); border-radius: var(--radius-sm); margin-bottom: 10px; }
+.bahan-chip-item { background: var(--mid-teal); color: white; border-radius: 20px; padding: 4px 10px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+.bahan-chip-item button { background: none; border: none; cursor: pointer; color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1; padding: 0; }
+.bahan-chip-item button:hover { color: white; }
+.bahan-result-card { background: white; border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); margin-bottom: 10px; cursor: pointer; transition: all 0.15s; border: 2px solid transparent; }
+.bahan-result-card:hover { border-color: var(--light-teal); box-shadow: var(--shadow-lg); }
+.bahan-result-card .src-badge { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; background: var(--mint); color: var(--deep-teal); }
+.bahan-result-card .src-badge.ai { background: #e8e0ff; color: #5b3fa6; }
+
+/* ── GROCERY ── */
+.grocery-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grocery-item { display: flex; align-items: center; gap: 9px; padding: 8px 4px; border-bottom: 1px solid var(--off-white); }
+.grocery-item input[type=checkbox] { width: 17px; height: 17px; accent-color: var(--mid-teal); flex-shrink: 0; }
+.grocery-item .g-name { flex: 1; font-size: 14px; font-weight: 700; cursor: pointer; }
+.grocery-item.checked .g-name { text-decoration: line-through; color: #aaa; }
+.grocery-item .g-qty { font-size: 12px; color: var(--text-light); font-weight: 700; }
+.grocery-item .g-del { background: none; border: none; cursor: pointer; color: #ccc; font-size: 14px; transition: color 0.15s; }
+.grocery-item .g-del:hover { color: var(--coral); }
+.inv-item { background: var(--off-white); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; cursor: pointer; transition: background 0.15s; }
+.inv-item:hover { background: var(--mint); }
+.inv-name { flex: 1; font-size: 13px; font-weight: 700; }
+.inv-qty-input { width: 70px; border: 1.5px solid #e0eeed; border-radius: 7px; padding: 4px 8px; font-size: 12px; font-weight: 700; font-family: 'Nunito', sans-serif; outline: none; }
+.inv-unit { font-size: 12px; color: var(--text-light); font-weight: 700; }
+.inv-status { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; }
+.inv-ok { background: #d4f5e0; color: #2a7a4a; }
+.inv-low { background: #fff3cd; color: #856404; }
+.inv-out { background: #ffe0e0; color: var(--coral); }
+
+/* ── RIWAYAT ── */
+.log-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--off-white); }
+.log-date { font-size: 11px; font-weight: 800; color: var(--text-light); width: 60px; flex-shrink: 0; }
+.log-menu { flex: 1; font-size: 14px; font-weight: 700; }
+.log-slot { font-size: 11px; color: var(--text-light); font-weight: 700; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c8dedd; border-radius: 4px; }
+
+/* ── FAB ── */
+.fab { position: fixed; right: 28px; bottom: 28px; width: 52px; height: 52px; border-radius: 50%; border: none; cursor: pointer; font-size: 24px; color: white; background: var(--coral); box-shadow: 0 4px 20px rgba(255,87,87,0.38); display: flex; align-items: center; justify-content: center; transition: all 0.18s; z-index: 100; }
+.fab:hover { transform: scale(1.08); background: #e04040; }
+
+/* ── PHOTO UPLOAD ── */
+.photo-upload-area { border: 2px dashed var(--light-teal); border-radius: var(--radius-sm); padding: 20px; text-align: center; cursor: pointer; transition: all 0.15s; background: var(--off-white); }
+.photo-upload-area:hover { border-color: var(--mid-teal); background: var(--mint); }
+.photo-upload-area img { max-height: 140px; max-width: 100%; border-radius: 8px; object-fit: cover; }
+.photo-upload-area .upload-hint { font-size: 13px; color: var(--text-light); font-weight: 700; }
+
+/* ── DETAIL RECIPE MODAL ── */
+.detail-hero { height: 180px; background: var(--mint); border-radius: var(--radius) var(--radius) 0 0; display: flex; align-items: center; justify-content: center; font-size: 72px; position: relative; overflow: hidden; }
+.detail-hero img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.detail-hero .hero-emoji { position: relative; z-index: 1; }
+.detail-body { padding: 20px 24px 28px; }
+.detail-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.ingr-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.ingr-table td { padding: 5px 4px; border-bottom: 1px solid var(--off-white); }
+.ingr-table td:first-child { font-weight: 800; color: var(--mid-teal); width: 90px; }
+.ingr-table td:nth-child(2) { font-weight: 600; width: 60px; }
+.steps-ol { list-style: none; counter-reset: s; padding: 0; }
+.steps-ol li { counter-increment: s; display: flex; gap: 10px; margin-bottom: 8px; font-size: 13.5px; line-height: 1.5; }
+.steps-ol li::before { content: counter(s); min-width: 26px; height: 26px; background: var(--mid-teal); color: white; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+.sec-divider { font-family: 'Fredoka One', cursive; font-size: 15px; color: var(--mid-teal); margin: 16px 0 8px; display: flex; align-items: center; gap: 6px; }
+
+/* ── IMPORT STRUCTURED ── */
+.import-tabs { display: flex; gap: 0; margin-bottom: 16px; border-radius: var(--radius-sm); overflow: hidden; border: 2px solid #e0eeed; }
+.import-tab { flex: 1; padding: 9px; text-align: center; font-size: 13px; font-weight: 800; cursor: pointer; color: var(--text-mid); background: white; border: none; transition: all 0.15s; }
+.import-tab.active { background: var(--mid-teal); color: white; }
+
+/* ── KATEGORI MANAGER ── */
+.kat-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px; background: var(--off-white); border-radius: 8px; margin-bottom: 5px; }
+.kat-emoji-input { width: 40px; text-align: center; border: 1.5px solid #e0eeed; border-radius: 7px; padding: 4px; font-size: 16px; background: white; outline: none; }
+.kat-name-input { flex: 1; border: 1.5px solid #e0eeed; border-radius: 7px; padding: 5px 9px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; outline: none; }
+
+/* ── EXPORT PREVIEW ── */
+#export-preview { background: white; padding: 20px; border-radius: var(--radius-sm); font-size: 12px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <span class="logo-icon">🍳</span>
+    <div><div>Dapur Pintar</div><div class="logo-sub">Meal Planner AI</div></div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-section">Menu Utama</div>
+    <button class="nav-item active" onclick="nav('home')"><span class="ni">🏠</span>Beranda</button>
+    <button class="nav-item" onclick="nav('planner')"><span class="ni">📅</span>Meal Planner</button>
+    <button class="nav-item" onclick="nav('resep')"><span class="ni">📖</span>Koleksi Resep</button>
+    <div class="nav-section">Tools AI</div>
+    <button class="nav-item" onclick="nav('bahan')"><span class="ni">🥕</span>Masak dari Bahan</button>
+    <button class="nav-item" onclick="nav('import')"><span class="ni">🔗</span>Import Resep</button>
+    <div class="nav-section">Dapur</div>
+    <button class="nav-item" onclick="nav('grocery')"><span class="ni">🛒</span>Grocery & Stok</button>
+    <button class="nav-item" onclick="nav('riwayat')"><span class="ni">📜</span>Riwayat Masak</button>
+    <div class="nav-section">Pengaturan</div>
+    <button class="nav-item" onclick="openApiKeyModal()"><span class="ni">🔑</span>API Key AI</button>
+  </div>
+</nav>
+
+<!-- ═══ PAGES ═══ -->
+<main class="main">
+
+<!-- ── HOME ── -->
+<div id="pg-home" class="page active">
+  <div class="page-header">
+    <div class="page-title">Halo! Mau masak apa hari ini? 👋</div>
+    <div id="home-date" style="font-size:13px;font-weight:700;color:var(--text-light)"></div>
+  </div>
+  <div class="today-banner">
+    <h2>📅 Menu Hari Ini</h2>
+    <div class="today-slots" id="today-slots">
+      <div class="today-slot"><div class="today-slot-label">☀️ Sarapan</div><div class="today-slot-menus" id="ts-sarapan"><span style="opacity:.5;font-size:12px">Belum ada</span></div></div>
+      <div class="today-slot"><div class="today-slot-label">🌤️ Siang</div><div class="today-slot-menus" id="ts-siang"><span style="opacity:.5;font-size:12px">Belum ada</span></div></div>
+      <div class="today-slot"><div class="today-slot-label">🌙 Malam</div><div class="today-slot-menus" id="ts-malam"><span style="opacity:.5;font-size:12px">Belum ada</span></div></div>
+      <div class="today-slot"><div class="today-slot-label">🍪 Snack</div><div class="today-slot-menus" id="ts-snack"><span style="opacity:.5;font-size:12px">Belum ada</span></div></div>
+    </div>
+  </div>
+  <div class="home-stats">
+    <div class="stat-card s1"><span class="stat-icon">📖</span><div><div class="stat-num" id="stat-resep">0</div><div class="stat-label">Resep Tersimpan</div></div></div>
+    <div class="stat-card s2"><span class="stat-icon">📅</span><div><div class="stat-num" id="stat-plan">0</div><div class="stat-label">Diplan Minggu Ini</div></div></div>
+    <div class="stat-card s3"><span class="stat-icon">🛒</span><div><div class="stat-num" id="stat-grocery">0</div><div class="stat-label">Item Belanja</div></div></div>
+    <div class="stat-card s4"><span class="stat-icon">📜</span><div><div class="stat-num" id="stat-log">0</div><div class="stat-label">Total Masak</div></div></div>
+  </div>
+  <div class="home-row">
+    <div class="card card-pad">
+      <div class="sec-title">💡 Ide Masak dari Stok</div>
+      <div class="idea-grid" id="home-ideas"></div>
+    </div>
+    <div class="card card-pad">
+      <div class="sec-title">⭐ Resep Favorit</div>
+      <div id="home-favs"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PLANNER ── -->
+<div id="pg-planner" class="page">
+  <div class="page-header">
+    <div class="page-title">📅 Meal Planner</div>
+    <div class="planner-controls">
+      <div class="week-nav">
+        <button class="week-btn" onclick="changeWeek(-1)">‹</button>
+        <span class="week-label" id="week-label">—</span>
+        <button class="week-btn" onclick="changeWeek(1)">›</button>
+      </div>
+      <button class="btn btn-teal" onclick="openRandomModal()">🎲 Acak Menu AI</button>
+      <button class="btn btn-ghost" onclick="buildGrocery()">🛒 Buat Grocery</button>
+      <button class="btn btn-outline" onclick="exportPlan()">📤 Export PDF</button>
+    </div>
+  </div>
+  <div class="card card-pad planner-wrap">
+    <div id="planner-area"></div>
+  </div>
+  <div style="margin-top:10px;font-size:12px;color:var(--text-light);font-weight:700;padding-left:4px;">
+    💡 Klik cell kosong untuk tambah menu. 🍳×2 = masak sekali, makan 2 hari. Klik nama menu untuk pilihan tambahan.
+  </div>
+</div>
+
+<!-- ── RESEP ── -->
+<div id="pg-resep" class="page">
+  <div class="page-header">
+    <div class="page-title">📖 Koleksi Resep</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-outline btn-sm" onclick="openKatModal()">⚙️ Kelola Kategori</button>
+      <button class="btn btn-primary" onclick="openAddResepModal()">+ Tambah Resep</button>
+    </div>
+  </div>
+  <div class="recipe-toolbar">
+    <input type="text" class="form-input recipe-search" placeholder="🔍 Cari resep..." oninput="renderResep()" id="resep-search">
+    <div class="chip-row" id="kat-chips"></div>
+  </div>
+  <div class="recipe-grid" id="recipe-grid"></div>
+</div>
+
+<!-- ── BAHAN ── -->
+<div id="pg-bahan" class="page">
+  <div class="page-header"><div class="page-title">🥕 Masak Apa dari Bahan Ini?</div></div>
+  <div class="card card-pad" style="margin-bottom:20px;">
+    <div style="font-size:14px;font-weight:700;color:var(--text-mid);margin-bottom:10px;">Ketik bahan yang kamu punya, AI cariin resepnya — termasuk dari internet! 🌐</div>
+    <div class="bahan-added" id="bahan-chips"></div>
+    <div style="display:flex;gap:8px;margin-top:8px;">
+      <input type="text" class="form-input" id="bahan-input" placeholder="Ketik bahan, tekan Enter atau koma..." style="flex:1" onkeydown="bahan_keydown(event)">
+      <button class="btn btn-ghost" onclick="addBahan()">+ Tambah</button>
+      <button class="btn btn-primary" onclick="cariBahan()">🤖 Carikan Resep</button>
+    </div>
+  </div>
+  <div id="bahan-results" style="display:none">
+    <div class="sec-title" style="margin-bottom:12px">✨ Hasil Pencarian Resep</div>
+    <div id="bahan-list"></div>
+  </div>
+</div>
+
+<!-- ── IMPORT ── -->
+<div id="pg-import" class="page">
+  <div class="page-header"><div class="page-title">🔗 Import Resep</div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+    <div class="card card-pad">
+      <div class="sec-title" style="margin-bottom:12px;">📥 Sumber Resep</div>
+      <div class="import-tabs">
+        <button class="import-tab active" onclick="switchImportTab('link',this)">🔗 Dari Link</button>
+        <button class="import-tab" onclick="switchImportTab('text',this)">📝 Dari Teks</button>
+        <button class="import-tab" onclick="switchImportTab('foto',this)">📷 Dari Foto</button>
+      </div>
+      <div id="import-link-tab">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
+          <span style="font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;background:#000;color:white;">📱 TikTok</span>
+          <span style="font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;background:linear-gradient(45deg,#f09433,#bc1888);color:white;">📸 Instagram</span>
+          <span style="font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;background:#FF0000;color:white;">▶ YouTube</span>
+          <span style="font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;background:var(--mint);color:var(--deep-teal);">🌐 Website</span>
+        </div>
+        <label class="form-label">URL Link</label>
+        <input type="url" class="form-input" id="import-url" placeholder="https://www.tiktok.com/@..." style="margin-bottom:10px;">
+        <div style="font-size:12px;color:var(--text-light);font-weight:600;margin-bottom:10px;">⚠️ Catatan: AI akan membuat resep tipikal berdasarkan nama masakan di URL jika tidak bisa akses konten langsung.</div>
+      </div>
+      <div id="import-text-tab" style="display:none">
+        <label class="form-label">Paste Caption / Deskripsi Resep</label>
+        <textarea class="form-textarea" id="import-text-input" rows="7" placeholder="Paste caption TikTok, deskripsi YouTube, teks resep dari manapun di sini...
+
+Contoh:
+Ayam Kecap Simple 🍗
+Bahan: 500g ayam, 3 sdm kecap manis, bawang putih...
+Cara: 1. Marinasi ayam... 2. Tumis..."></textarea>
+      </div>
+      <div id="import-foto-tab" style="display:none">
+        <label class="form-label">Upload Foto / Screenshot Resep</label>
+        <div class="photo-upload-area" onclick="document.getElementById('import-foto-input').click()" id="import-foto-area">
+          <div style="font-size:36px;margin-bottom:8px;">📷</div>
+          <div class="upload-hint">Klik untuk upload foto screenshot resep</div>
+          <div style="font-size:11px;color:var(--text-light);margin-top:4px;">JPG, PNG, WebP — max 10MB</div>
+        </div>
+        <input type="file" id="import-foto-input" accept="image/*" style="display:none" onchange="handleFotoImport(event)">
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:14px;padding:12px;" onclick="doImport()">
+        🤖 Extract Resep dengan AI
+      </button>
+    </div>
+    <div class="card card-pad" id="import-result-card" style="display:none;">
+      <div class="sec-title" style="margin-bottom:2px;">✅ Resep Berhasil Diextract</div>
+      <div style="font-size:12px;color:var(--text-light);font-weight:600;margin-bottom:14px;">Edit dulu sebelum disimpan!</div>
+      <div id="import-edit-form"></div>
+      <div style="display:flex;gap:8px;margin-top:16px;">
+        <button class="btn btn-primary" onclick="saveImported()">💾 Simpan ke Koleksi</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('import-result-card').style.display='none'">Batal</button>
+      </div>
+    </div>
+    <div class="card card-pad" id="import-loading-card" style="display:none;">
+      <div class="ai-box ai-loading" style="margin-top:0"><span class="spinner"></span> AI sedang membaca resep, harap tunggu...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── GROCERY ── -->
+<div id="pg-grocery" class="page">
+  <div class="page-header">
+    <div class="page-title">🛒 Grocery & Inventori</div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-teal btn-sm" onclick="buildGrocery()">🔄 Sync dari Meal Plan</button>
+    </div>
+  </div>
+  <div class="grocery-layout">
+    <div class="card card-pad">
+      <div class="sec-title">🛒 Daftar Belanja</div>
+      <div id="grocery-list"></div>
+      <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+        <input type="text" class="form-input" id="grocery-name-input" placeholder="Nama item..." style="flex:1;min-width:120px;">
+        <input type="text" class="form-input" id="grocery-qty-input" placeholder="Qty" style="width:70px;">
+        <button class="btn btn-ghost btn-sm" onclick="addGroceryManual()">+ Tambah</button>
+      </div>
+    </div>
+    <div class="card card-pad">
+      <div class="sec-title">📦 Stok Dapur</div>
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">
+        <div class="chip active" onclick="filterInv('all',this)">Semua</div>
+        <div class="chip" onclick="filterInv('kulkas',this)">🧊 Kulkas</div>
+        <div class="chip" onclick="filterInv('pantry',this)">🏠 Pantry</div>
+      </div>
+      <div id="inventory-list"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+        <input type="text" class="form-input" id="inv-name" placeholder="Nama bahan..." style="flex:1;min-width:100px;">
+        <input type="text" class="form-input" id="inv-qty" placeholder="Qty" style="width:60px;">
+        <input type="text" class="form-input" id="inv-unit" placeholder="Satuan" style="width:70px;">
+        <select class="form-select" id="inv-loc" style="width:90px;"><option value="kulkas">Kulkas</option><option value="pantry">Pantry</option></select>
+        <button class="btn btn-ghost btn-sm" onclick="addInvItem()">+</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── RIWAYAT ── -->
+<div id="pg-riwayat" class="page">
+  <div class="page-header">
+    <div class="page-title">📜 Riwayat Masak</div>
+    <button class="btn btn-ghost btn-sm" onclick="clearLog()">🗑️ Hapus Semua</button>
+  </div>
+  <div class="card card-pad" style="max-width:600px;">
+    <div id="log-list"></div>
+    <div style="color:var(--text-light);font-size:13px;font-weight:600;margin-top:8px;" id="log-empty" style="display:none">Belum ada riwayat masak. Menu dari meal plan yang sudah lewat akan otomatis masuk ke sini.</div>
+  </div>
+</div>
+
+</main>
+
+<button class="fab" onclick="fabAction()" id="fab">+</button>
+
+<!-- ═══ MODALS ═══ -->
+
+<!-- RANDOM MODAL -->
+<div class="modal-overlay" id="modal-random">
+  <div class="modal">
+    <div class="modal-head"><h3>🎲 Generate Meal Plan dengan AI</h3><button class="modal-close" onclick="closeModal('modal-random')">✕</button></div>
+    <div class="modal-body">
+      <label class="form-label">Preferensi / Catatan</label>
+      <textarea class="form-textarea" id="random-note" placeholder="Contoh: semua menu ayam, tidak suka seafood, mau ada menu Korea di akhir pekan, low carb untuk sarapan..."></textarea>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:12px;">
+        <input type="checkbox" id="opt-double" checked style="width:16px;height:16px;accent-color:var(--mid-teal);">
+        <label for="opt-double" style="font-size:13px;font-weight:700;cursor:pointer;">🍳×2 Beberapa menu dimasak sekali untuk 2 hari berbeda</label>
+      </div>
+      <div id="random-result" style="display:none;margin-top:14px;">
+        <div class="ai-box" id="random-ai-text"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:14px;">
+        <button class="btn btn-primary" style="flex:1" onclick="doRandom()">🤖 Generate!</button>
+        <button class="btn btn-ghost" id="random-save-btn" style="display:none" onclick="saveRandomPlan()">💾 Simpan ke Planner</button>
+        <button class="btn btn-outline" onclick="closeModal('modal-random')">Batal</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLOT MODAL -->
+<div class="modal-overlay" id="modal-slot">
+  <div class="modal">
+    <div class="modal-head"><h3 id="slot-modal-title">Tambah Menu</h3><button class="modal-close" onclick="closeModal('modal-slot')">✕</button></div>
+    <div class="modal-body">
+      <label class="form-label">Pilih dari Koleksi</label>
+      <select class="form-select" id="slot-pick"></select>
+      <div style="text-align:center;font-size:12px;color:var(--text-light);margin:8px 0;">— atau ketik manual —</div>
+      <input type="text" class="form-input" id="slot-manual" placeholder="Nama menu...">
+      <div style="display:flex;align-items:center;gap:8px;margin-top:12px;">
+        <input type="checkbox" id="slot-double" style="width:16px;height:16px;accent-color:var(--mid-teal);">
+        <label for="slot-double" style="font-size:13px;font-weight:700;cursor:pointer;">🍳×2 Masak double (berlaku juga hari lain)</label>
+      </div>
+      <label class="form-label">Berlaku juga hari:</label>
+      <select class="form-select" id="slot-double-day">
+        <option value="">— Pilih hari —</option>
+        <option>Senin</option><option>Selasa</option><option>Rabu</option>
+        <option>Kamis</option><option>Jumat</option><option>Sabtu</option><option>Minggu</option>
+      </select>
+      <div style="display:flex;gap:8px;margin-top:16px;">
+        <button class="btn btn-primary" style="flex:1" onclick="saveSlot()">💾 Simpan</button>
+        <button class="btn btn-outline" onclick="closeModal('modal-slot')">Batal</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD/EDIT RESEP MODAL -->
+<div class="modal-overlay" id="modal-resep">
+  <div class="modal modal-wide">
+    <div class="modal-head"><h3 id="resep-modal-title">Tambah Resep</h3><button class="modal-close" onclick="closeModal('modal-resep')">✕</button></div>
+    <div class="modal-body">
+      <div class="recipe-edit-grid">
+        <div>
+          <label class="form-label">Nama Menu *</label>
+          <input type="text" class="form-input" id="re-name" placeholder="Nama masakan...">
+        </div>
+        <div>
+          <label class="form-label">Kategori *</label>
+          <select class="form-select" id="re-cat"></select>
+        </div>
+        <div>
+          <label class="form-label">Waktu Masak</label>
+          <input type="text" class="form-input" id="re-time" placeholder="cth: 30 menit">
+        </div>
+        <div>
+          <label class="form-label">Kalori / Porsi</label>
+          <input type="number" class="form-input" id="re-cal" placeholder="cth: 350">
+        </div>
+        <div>
+          <label class="form-label">Porsi (orang)</label>
+          <input type="number" class="form-input" id="re-serving" placeholder="cth: 4">
+        </div>
+        <div>
+          <label class="form-label">Rating</label>
+          <div class="stars" id="re-stars-input">
+            <span class="star" onclick="setReRating(1)">★</span>
+            <span class="star" onclick="setReRating(2)">★</span>
+            <span class="star" onclick="setReRating(3)">★</span>
+            <span class="star" onclick="setReRating(4)">★</span>
+            <span class="star" onclick="setReRating(5)">★</span>
+          </div>
+        </div>
+        <div class="full">
+          <label class="form-label">Tags (pisah koma)</label>
+          <input type="text" class="form-input" id="re-tags" placeholder="Favorit, Quick <30min, Budget, Diet, Prep sehari sebelum...">
+        </div>
+        <div class="full">
+          <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+            <input type="checkbox" id="re-needs-prep" style="width:16px;height:16px;accent-color:var(--coral);">
+            <label for="re-needs-prep" style="font-size:13px;font-weight:700;cursor:pointer;">⏰ Butuh persiapan sehari sebelumnya (marinade, rendam, dll)</label>
+          </div>
+        </div>
+        <div class="full">
+          <label class="form-label">Foto Menu</label>
+          <div class="photo-upload-area" onclick="document.getElementById('re-foto-input').click()" id="re-foto-area">
+            <div id="re-foto-preview"><div style="font-size:32px;margin-bottom:6px;">📷</div><div class="upload-hint">Klik untuk upload foto</div></div>
+          </div>
+          <input type="file" id="re-foto-input" accept="image/*" style="display:none" onchange="handleReFoto(event)">
+        </div>
+      </div>
+      <div class="sec-divider">🧂 Bahan-Bahan</div>
+      <div id="re-ingr-list"></div>
+      <button class="add-row-btn" onclick="addIngrRow()">+ Tambah Bahan</button>
+      <div class="sec-divider">👨‍🍳 Langkah Masak</div>
+      <div id="re-steps-list"></div>
+      <button class="add-row-btn" onclick="addStepRow()">+ Tambah Langkah</button>
+      <div style="display:flex;gap:8px;margin-top:20px;">
+        <button class="btn btn-primary" style="flex:1" onclick="saveResep()">💾 Simpan Resep</button>
+        <button class="btn btn-outline" onclick="closeModal('modal-resep')">Batal</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL RESEP MODAL -->
+<div class="modal-overlay" id="modal-detail">
+  <div class="modal modal-wide">
+    <div class="modal-close" style="position:absolute;top:14px;right:14px;z-index:10;" onclick="closeModal('modal-detail')">
+      <button class="modal-close" onclick="closeModal('modal-detail')">✕</button>
+    </div>
+    <div id="detail-content"></div>
+  </div>
+</div>
+
+<!-- KAT MODAL -->
+<div class="modal-overlay" id="modal-kat">
+  <div class="modal">
+    <div class="modal-head"><h3>⚙️ Kelola Kategori Resep</h3><button class="modal-close" onclick="closeModal('modal-kat')">✕</button></div>
+    <div class="modal-body">
+      <div id="kat-list"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <input type="text" class="form-input" id="new-kat-emoji" placeholder="🍜" style="width:50px;text-align:center;">
+        <input type="text" class="form-input" id="new-kat-name" placeholder="Nama kategori baru...">
+        <button class="btn btn-teal btn-sm" onclick="addKat()">+ Tambah</button>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:14px;" onclick="saveKat()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXPORT MODAL -->
+<div class="modal-overlay" id="modal-export">
+  <div class="modal modal-wide">
+    <div class="modal-head"><h3>📤 Export Meal Plan</h3><button class="modal-close" onclick="closeModal('modal-export')">✕</button></div>
+    <div class="modal-body">
+      <div id="export-preview"></div>
+      <div style="display:flex;gap:8px;margin-top:16px;">
+        <button class="btn btn-primary" onclick="doPrint()">🖨️ Print / Save PDF</button>
+        <button class="btn btn-ghost" onclick="copyPlanText()">📋 Copy Teks</button>
+        <button class="btn btn-outline" onclick="closeModal('modal-export')">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BAHAN RESEP DETAIL MODAL -->
+<div class="modal-overlay" id="modal-bahan-detail">
+  <div class="modal">
+    <div class="modal-head"><h3 id="bahan-detail-title">Resep</h3><button class="modal-close" onclick="closeModal('modal-bahan-detail')">✕</button></div>
+    <div class="modal-body">
+      <div id="bahan-detail-body"></div>
+      <div style="display:flex;gap:8px;margin-top:14px;">
+        <button class="btn btn-teal" style="flex:1" id="bahan-save-btn">💾 Simpan ke Koleksi</button>
+        <button class="btn btn-outline" onclick="closeModal('modal-bahan-detail')">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// DATA & STATE
+// ═══════════════════════════════════════════
+
+let DB = {
+  recipes: [
+    { id:1, name:'Pancake Pisang', cat:'Sarapan', emoji:'🥞', time:'15 menit', cal:320, serving:4, rating:5,
+      tags:['Sarapan','Quick <30min'], needsPrep:false, photo:null,
+      ingr:[{qty:'2',unit:'buah',name:'pisang matang'},{qty:'5',unit:'sdm',name:'tepung terigu'},{qty:'1',unit:'butir',name:'telur'},{qty:'½',unit:'gelas',name:'susu'},{qty:'2',unit:'sdm',name:'gula'},{qty:'½',unit:'sdt',name:'garam'},{qty:'1',unit:'sdm',name:'mentega'}],
+      steps:['Hancurkan pisang hingga halus','Campurkan dengan telur dan susu','Tambahkan tepung, gula, garam — aduk rata','Panaskan wajan dengan mentega','Tuang ¼ cangkir adonan per pancake','Masak hingga muncul gelembung, balik','Sajikan hangat'] },
+    { id:2, name:'Rendang', cat:'Ayam & Daging', emoji:'🥩', time:'3 jam', cal:520, serving:6, rating:5,
+      tags:['Favorit','Masak Double'], needsPrep:true, photo:null,
+      ingr:[{qty:'500',unit:'gram',name:'daging sapi'},{qty:'400',unit:'ml',name:'santan kental'},{qty:'5',unit:'lembar',name:'daun jeruk'},{qty:'2',unit:'batang',name:'serai'},{qty:'',unit:'',name:'Bumbu halus: bawang, cabai, jahe, lengkuas'}],
+      steps:['Haluskan semua bumbu','Tumis bumbu hingga harum','Masukkan daging, aduk rata','Tuang santan dan semua daun','Masak api sedang sambil diaduk','Kecilkan api, masak hingga mengering dan kecokelatan'] },
+    { id:3, name:'Ayam Bakar', cat:'Ayam & Daging', emoji:'🍗', time:'45 menit', cal:380, serving:4, rating:4,
+      tags:['Favorit','Masak Double'], needsPrep:true, photo:null,
+      ingr:[{qty:'1',unit:'ekor',name:'ayam belah 2'},{qty:'3',unit:'sdm',name:'kecap manis'},{qty:'2',unit:'sdm',name:'kecap asin'},{qty:'',unit:'',name:'Bumbu: bawang putih, ketumbar, kunyit, jahe'}],
+      steps:['Lumuri ayam dengan bumbu dan kecap','Diamkan minimal 30 menit','Bakar sambil sesekali diolesi sisa bumbu','Masak hingga matang dan sedikit gosong'] },
+    { id:4, name:'Nasi Goreng', cat:'Nasi', emoji:'🍳', time:'15 menit', cal:430, serving:2, rating:4,
+      tags:['Quick <30min','Budget'], needsPrep:false, photo:null,
+      ingr:[{qty:'2',unit:'piring',name:'nasi putih dingin'},{qty:'2',unit:'butir',name:'telur'},{qty:'3',unit:'siung',name:'bawang putih'},{qty:'2',unit:'sdm',name:'kecap manis'},{qty:'1',unit:'sdm',name:'kecap asin'}],
+      steps:['Tumis bawang putih cincang','Masukkan telur orak-arik','Tambahkan nasi, aduk rata','Beri kecap, garam & merica','Sajikan dengan telur mata sapi'] },
+    { id:5, name:'Mie Ayam', cat:'Mie & Pasta', emoji:'🍜', time:'30 menit', cal:490, serving:2, rating:5,
+      tags:['Favorit'], needsPrep:false, photo:null,
+      ingr:[{qty:'200',unit:'gram',name:'mie basah / egg noodle'},{qty:'150',unit:'gram',name:'ayam cincang'},{qty:'3',unit:'siung',name:'bawang putih'},{qty:'1',unit:'sdm',name:'minyak wijen'},{qty:'',unit:'',name:'kaldu ayam, daun bawang'}],
+      steps:['Rebus mie, tiriskan','Tumis bawang, masukkan ayam cincang','Bumbu kecap asin, garam, merica','Siapkan mangkuk: mie + minyak wijen','Taruh ayam di atas, siram kaldu panas','Taburi daun bawang & bawang goreng'] },
+    { id:6, name:'Tumis Kangkung', cat:'Sayur', emoji:'🥬', time:'10 menit', cal:120, serving:3, rating:4,
+      tags:['Quick <30min','Budget','Diet'], needsPrep:false, photo:null,
+      ingr:[{qty:'1',unit:'ikat',name:'kangkung'},{qty:'4',unit:'siung',name:'bawang putih'},{qty:'1',unit:'sdm',name:'saus tiram'},{qty:'1',unit:'sdm',name:'kecap asin'}],
+      steps:['Cuci dan potong kangkung','Tumis bawang putih & cabai','Masukkan kangkung, api besar','Tambahkan saus tiram & kecap','Masak 2-3 menit, sajikan segera'] },
+  ],
+  kategoris: [
+    {emoji:'☀️',name:'Sarapan'},{emoji:'🍗',name:'Ayam & Daging'},{emoji:'🐟',name:'Ikan & Seafood'},
+    {emoji:'🍚',name:'Nasi'},{emoji:'🥦',name:'Sayur'},{emoji:'🟡',name:'Tahu & Tempe'},
+    {emoji:'🍜',name:'Mie & Pasta'},{emoji:'🍪',name:'Snack'},{emoji:'🧃',name:'Minuman'},{emoji:'🇰🇷',name:'Korean'}
+  ],
+  // mealPlan: { 'YYYY-Www': { 'dayslot': [{name, id_recipe, isDouble, isReuseOf}] } }
+  mealPlan: {},
+  grocery: [
+    {id:1,name:'Ayam',qty:'500g',checked:false,manual:false},
+    {id:2,name:'Kangkung',qty:'2 ikat',checked:false,manual:false},
+    {id:3,name:'Tempe',qty:'3 papan',checked:false,manual:true},
+    {id:4,name:'Kecap manis',qty:'1 botol',checked:false,manual:true},
+  ],
+  inventory: [
+    {id:1,name:'Bawang putih',qty:'1 siung',unit:'bonggol',loc:'pantry',status:'ok'},
+    {id:2,name:'Bawang merah',qty:'200',unit:'gram',loc:'pantry',status:'ok'},
+    {id:3,name:'Telur',qty:'6',unit:'butir',loc:'kulkas',status:'low'},
+    {id:4,name:'Minyak goreng',qty:'0',unit:'liter',loc:'pantry',status:'out'},
+    {id:5,name:'Kecap manis',qty:'1',unit:'botol',loc:'pantry',status:'ok'},
+    {id:6,name:'Tempe',qty:'2',unit:'papan',loc:'kulkas',status:'ok'},
+  ],
+  cookLog: [],
+  nextId: 100,
+  apiKey: '',
+};
+
+// Current state
+let currentPage = 'home';
+let currentWeek = getThisWeek();
+let currentResepId = null;
+let editResepId = null;
+let reRating = 0;
+let currentSlotKey = null;
+let activeKatFilter = 'Semua';
+let bahanList = [];
+let invFilter = 'all';
+let importedRecipeData = null;
+
+// ═══════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════
+function getThisWeek() {
+  const now = new Date();
+  const mon = new Date(now);
+  mon.setDate(now.getDate() - ((now.getDay()+6)%7));
+  return weekKey(mon);
+}
+function weekKey(monDate) {
+  return monDate.toISOString().split('T')[0];
+}
+function weekStartFromKey(key) {
+  return new Date(key + 'T00:00:00');
+}
+function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate()+n); return r; }
+function fmtDate(d) { return d.toLocaleDateString('id-ID',{day:'numeric',month:'short'}); }
+function fmtDateFull(d) { return d.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); }
+function genId() { return ++DB.nextId; }
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function esc(s) { return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function starsHtml(n) { return '★'.repeat(n)+'☆'.repeat(5-n); }
+function katEmoji(name) { const k = DB.kategoris.find(k=>k.name===name); return k ? k.emoji : '🍽️'; }
+function katColor(name) {
+  const map = {'Sarapan':'#fff8e0','Ayam & Daging':'#ffe8d8','Ikan & Seafood':'#d8f0ff','Nasi':'#fdf5d8','Sayur':'#d8f5e8','Tahu & Tempe':'#fdf0d8','Mie & Pasta':'#fde8e8','Snack':'#f0d8f5','Minuman':'#d8eeff','Korean':'#fde8f0'};
+  return map[name] || '#e8f5f4';
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+function nav(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('pg-'+page).classList.add('active');
+  const navMap = ['home','planner','resep','bahan','import','grocery','riwayat'];
+  const idx = navMap.indexOf(page);
+  if(idx >= 0) document.querySelectorAll('.nav-item')[idx].classList.add('active');
+  currentPage = page;
+  if(page === 'planner') renderPlanner();
+  if(page === 'resep') { renderKatChips(); renderResep(); }
+  if(page === 'grocery') renderGrocery();
+  if(page === 'home') renderHome();
+  if(page === 'riwayat') renderLog();
+}
+
+// ═══════════════════════════════════════════
+// HOME
+// ═══════════════════════════════════════════
+function renderHome() {
+  document.getElementById('home-date').textContent = fmtDateFull(new Date());
+  document.getElementById('stat-resep').textContent = DB.recipes.length;
+  const wk = DB.mealPlan[currentWeek] || {};
+  let planCount = 0;
+  Object.values(wk).forEach(arr => planCount += arr.length);
+  document.getElementById('stat-plan').textContent = planCount;
+  document.getElementById('stat-grocery').textContent = DB.grocery.filter(g=>!g.checked).length;
+  document.getElementById('stat-log').textContent = DB.cookLog.length;
+
+  // Today's meals
+  const now = new Date();
+  const todayIdx = (now.getDay()+6)%7;
+  const dayKeys = ['sen','sel','rab','kam','jum','sab','min'];
+  const slotKeys = ['sarapan','siang','malam','snack'];
+  slotKeys.forEach(s => {
+    const key = dayKeys[todayIdx]+'_'+s;
+    const items = (wk[key]||[]);
+    const el = document.getElementById('ts-'+s);
+    if(items.length) el.innerHTML = items.map(i=>`<div class="today-slot-menu">${i.name}</div>`).join('');
+    else el.innerHTML = '<span style="opacity:.5;font-size:12px">Belum ada</span>';
+  });
+
+  // Ideas
+  const ideas = DB.recipes.slice(0,3);
+  document.getElementById('home-ideas').innerHTML = ideas.map(r=>`
+    <div class="idea-card" style="background:${katColor(r.cat)}" onclick="openDetail(${r.id})">
+      <div style="font-size:30px;margin-bottom:4px;">${r.emoji}</div>
+      <div style="font-size:13px;font-weight:800;color:var(--deep-teal)">${r.name}</div>
+      <div style="font-size:11px;color:var(--text-light);margin-top:3px;">⏱ ${r.time}</div>
+    </div>
+  `).join('');
+
+  // Favs
+  const favs = DB.recipes.filter(r=>r.rating>=4).slice(0,4);
+  document.getElementById('home-favs').innerHTML = favs.map(r=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--off-white);cursor:pointer" onclick="openDetail(${r.id})">
+      <span style="font-size:24px">${r.emoji}</span>
+      <div style="flex:1"><div style="font-size:13px;font-weight:700">${r.name}</div><div style="font-size:11px;color:var(--text-light)">${r.cat}</div></div>
+      <div style="color:#f5b942;font-size:12px">${starsHtml(r.rating)}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════
+// PLANNER
+// ═══════════════════════════════════════════
+const DAYS_ID = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'];
+const DAY_KEYS = ['sen','sel','rab','kam','jum','sab','min'];
+const SLOT_DEFS = [
+  {key:'sarapan', label:'☀️ Sarapan'},
+  {key:'siang', label:'🌤️ Siang'},
+  {key:'malam', label:'🌙 Malam'},
+  {key:'snack', label:'🍪 Snack'},
+];
+
+function renderPlanner() {
+  const monDate = weekStartFromKey(currentWeek);
+  document.getElementById('week-label').textContent = fmtDate(monDate)+' – '+fmtDate(addDays(monDate,6));
+  const wk = DB.mealPlan[currentWeek] = DB.mealPlan[currentWeek] || {};
+  const todayIdx = (new Date().getDay()+6)%7;
+
+  let html = `<table class="planner-table"><thead><tr><th class="col-label"></th>`;
+  DAYS_ID.forEach((d,i)=>{
+    html += `<th><div class="day-head ${i===todayIdx?'today':''}">
+      <div class="dname">${d}</div>
+      <div class="ddate">${fmtDate(addDays(monDate,i))}</div>
+    </div></th>`;
+  });
+  html += `</tr></thead><tbody>`;
+
+  SLOT_DEFS.forEach(slot => {
+    html += `<tr><td class="slot-label-cell">${slot.label}</td>`;
+    DAY_KEYS.forEach(dk => {
+      const cellKey = dk+'_'+slot.key;
+      const items = wk[cellKey] || [];
+      const hasItems = items.length > 0;
+      html += `<td class="plan-cell ${hasItems?'has-items':''}" onclick="openSlotModal('${cellKey}','${DAYS_ID[DAY_KEYS.indexOf(dk)]} ${slot.label}')">`;
+      items.forEach((item,ii) => {
+        const cls = item.isDouble ? 'double-src' : item.isReuseOf ? 'double-reuse' : '';
+        html += `<div class="plan-item ${cls}">
+          <span style="flex:1;line-height:1.3;">${item.name}</span>
+          ${item.isDouble ? '<span title="Masak double">🍳×2</span>' : ''}
+          ${item.isReuseOf ? '<span title="Hasil masak hari lain">♻️</span>' : ''}
+          <button class="plan-item-del" data-cell="${cellKey}" data-idx="${ii}">✕</button>
+        </div>`;
+      });
+      html += `<div class="add-hint">+</div>`;
+      html += `</td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table>`;
+  document.getElementById('planner-area').innerHTML = html;
+}
+
+function changeWeek(dir) {
+  const mon = weekStartFromKey(currentWeek);
+  mon.setDate(mon.getDate() + dir*7);
+  currentWeek = weekKey(mon);
+  renderPlanner();
+}
+
+function openSlotModal(cellKey, label) {
+  currentSlotKey = cellKey;
+  document.getElementById('slot-modal-title').textContent = 'Tambah Menu — '+label;
+  const sel = document.getElementById('slot-pick');
+  sel.innerHTML = '<option value="">— Pilih dari koleksi —</option>';
+  DB.recipes.forEach(r => sel.innerHTML += `<option value="${r.id}">${r.emoji} ${r.name}</option>`);
+  document.getElementById('slot-manual').value = '';
+  document.getElementById('slot-double').checked = false;
+  openModal('modal-slot');
+}
+
+function saveSlot() {
+  const pick = document.getElementById('slot-pick').value;
+  const manual = document.getElementById('slot-manual').value.trim();
+  const isDouble = document.getElementById('slot-double').checked;
+  const doubleDay = document.getElementById('slot-double-day').value;
+
+  let name = manual;
+  let rid = null;
+  if(pick) { const r = DB.recipes.find(x=>x.id==pick); name = r.name; rid = r.id; }
+  if(!name) return alert('Pilih atau ketik nama menu!');
+
+  const wk = DB.mealPlan[currentWeek] = DB.mealPlan[currentWeek] || {};
+  wk[currentSlotKey] = wk[currentSlotKey] || [];
+  wk[currentSlotKey].push({ name, id: rid, isDouble, isReuseOf: false });
+
+  if(isDouble && doubleDay) {
+    const dIdx = DAYS_ID.findIndex(d=>d===doubleDay);
+    if(dIdx >= 0) {
+      const slotPart = currentSlotKey.split('_')[1];
+      const newKey = DAY_KEYS[dIdx]+'_'+slotPart;
+      wk[newKey] = wk[newKey] || [];
+      wk[newKey].push({ name, id: rid, isDouble: false, isReuseOf: currentSlotKey });
+    }
+  }
+  closeModal('modal-slot');
+  renderPlanner();
+  logCook(name);
+  saveDB();
+}
+
+function removePlanItem(cellKey, idx) {
+  const wk = DB.mealPlan[currentWeek] || {};
+  if(wk[cellKey]) { wk[cellKey].splice(idx,1); saveDB(); renderPlanner(); }
+}
+
+// Event delegation for planner delete buttons
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('.plan-item-del');
+  if(btn) {
+    e.stopPropagation();
+    const cellKey = btn.dataset.cell;
+    const idx = parseInt(btn.dataset.idx);
+    removePlanItem(cellKey, idx);
+  }
+});
+
+function buildGrocery() {
+  const wk = DB.mealPlan[currentWeek] || {};
+  const allMenus = [];
+  Object.values(wk).forEach(arr => arr.forEach(item => {
+    if(item.id) {
+      const r = DB.recipes.find(x=>x.id===item.id);
+      if(r) r.ingr.forEach(ingr => allMenus.push({name:ingr.name, qty:ingr.qty+' '+ingr.unit}));
+    }
+  }));
+  allMenus.forEach(item => {
+    if(!DB.grocery.find(g=>g.name.toLowerCase()===item.name.toLowerCase())) {
+      DB.grocery.push({id:genId(), name:item.name, qty:item.qty, checked:false, manual:false});
+    }
+  });
+  nav('grocery');
+}
+
+// ═══════════════════════════════════════════
+// RECIPE CARDS
+// ═══════════════════════════════════════════
+function renderKatChips() {
+  const container = document.getElementById('kat-chips');
+  let html = `<div class="chip ${activeKatFilter==='Semua'?'active':''}" onclick="setKatFilter('Semua',this)">Semua</div>`;
+  DB.kategoris.forEach(k => {
+    html += `<div class="chip ${activeKatFilter===k.name?'active':''}" onclick="setKatFilter('${k.name}',this)">${k.emoji} ${k.name}</div>`;
+  });
+  container.innerHTML = html;
+}
+function setKatFilter(name, el) {
+  activeKatFilter = name;
+  document.querySelectorAll('#kat-chips .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderResep();
+}
+function renderResep() {
+  const q = (document.getElementById('resep-search')?.value||'').toLowerCase();
+  let list = DB.recipes;
+  if(activeKatFilter !== 'Semua') list = list.filter(r=>r.cat===activeKatFilter);
+  if(q) list = list.filter(r=>r.name.toLowerCase().includes(q)||(r.tags||[]).some(t=>t.toLowerCase().includes(q)));
+  const grid = document.getElementById('recipe-grid');
+  if(!grid) return;
+  grid.innerHTML = list.map(r => `
+    <div class="recipe-card">
+      <div class="recipe-thumb" style="background:${katColor(r.cat)}">
+        ${r.photo ? `<img src="${r.photo}" alt="${r.name}">` : ''}
+        <span class="emoji-fallback">${r.emoji}</span>
+      </div>
+      <div class="recipe-body">
+        <div class="recipe-cat">${katEmoji(r.cat)} ${r.cat}</div>
+        <div class="recipe-name">${r.name}</div>
+        <div class="recipe-meta">
+          <span class="badge badge-teal">⏱ ${r.time||'-'}</span>
+          <span class="badge badge-grey">🔥 ${r.cal||0} kal</span>
+          ${r.needsPrep?'<span class="badge badge-prep">⏰ Prep dulu</span>':''}
+        </div>
+        <div class="recipe-tags">${(r.tags||[]).map(t=>`<span class="recipe-tag">${t}</span>`).join('')}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
+          <div style="color:#f5b942;font-size:12px">${starsHtml(r.rating||0)}</div>
+          <div class="recipe-actions">
+            <button class="btn btn-icon" title="Detail" onclick="openDetail(${r.id})">👁</button>
+            <button class="btn btn-icon" title="Edit" onclick="openEditResepModal(${r.id})">✏️</button>
+            <button class="btn btn-icon" title="Hapus" onclick="deleteResep(${r.id})">🗑</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('') || '<div style="color:var(--text-light);padding:24px;font-size:14px;font-weight:600;grid-column:1/-1">Resep tidak ditemukan.</div>';
+}
+
+function openDetail(id) {
+  const r = DB.recipes.find(x=>x.id===id);
+  if(!r) return;
+  const content = document.getElementById('detail-content');
+  content.innerHTML = `
+    <div class="detail-hero" style="background:${katColor(r.cat)}">
+      ${r.photo?`<img src="${r.photo}" alt="${r.name}">`:''}
+      <span class="hero-emoji">${r.emoji}</span>
+    </div>
+    <div class="detail-body">
+      <div style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--deep-teal);margin-bottom:8px;">${r.name}</div>
+      <div class="detail-meta">
+        <span class="badge badge-teal">${katEmoji(r.cat)} ${r.cat}</span>
+        <span class="badge badge-grey">⏱ ${r.time||'-'}</span>
+        <span class="badge badge-grey">🔥 ${r.cal||0} kal</span>
+        <span class="badge badge-grey">👥 ${r.serving||'-'} porsi</span>
+        ${r.needsPrep?'<span class="badge badge-prep">⏰ Persiapan sehari sebelum</span>':''}
+      </div>
+      <div style="color:#f5b942;font-size:14px;margin-bottom:8px;">${starsHtml(r.rating||0)}</div>
+      ${(r.tags||[]).length ? `<div class="chip-row" style="margin-bottom:12px">${r.tags.map(t=>`<span class="chip chip-mint" style="font-size:11px;">${t}</span>`).join('')}</div>` : ''}
+      <div class="sec-divider">🧂 Bahan-Bahan</div>
+      <table class="ingr-table">${(r.ingr||[]).map(i=>`<tr><td>${i.qty} ${i.unit}</td><td></td><td>${i.name}</td></tr>`).join('')}</table>
+      <div class="sec-divider">👨‍🍳 Langkah Masak</div>
+      <ol class="steps-ol">${(r.steps||[]).map(s=>`<li>${s}</li>`).join('')}</ol>
+      <div style="display:flex;gap:8px;margin-top:20px;">
+        <button class="btn btn-teal" onclick="closeModal('modal-detail');nav('planner')">+ Tambah ke Planner</button>
+        <button class="btn btn-ghost" onclick="openEditResepModal(${r.id});closeModal('modal-detail')">✏️ Edit</button>
+        <button class="btn btn-outline" onclick="closeModal('modal-detail')">Tutup</button>
+      </div>
+    </div>`;
+  openModal('modal-detail');
+}
+
+function deleteResep(id) {
+  if(!confirm('Hapus resep ini?')) return;
+  DB.recipes = DB.recipes.filter(r=>r.id!==id);
+  saveDB(); renderResep(); renderHome();
+}
+
+// ═══════════════════════════════════════════
+// ADD / EDIT RESEP MODAL
+// ═══════════════════════════════════════════
+let reIngrList = [];
+let reStepList = [];
+
+function openAddResepModal() {
+  editResepId = null; reRating = 0; reIngrList = []; reStepList = [];
+  document.getElementById('resep-modal-title').textContent = 'Tambah Resep';
+  ['re-name','re-time','re-cal','re-serving','re-tags'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('re-needs-prep').checked = false;
+  document.getElementById('re-foto-preview').innerHTML = '<div style="font-size:32px;margin-bottom:6px;">📷</div><div class="upload-hint">Klik untuk upload foto</div>';
+  document.getElementById('re-foto-input').value = '';
+  populateResepKatSelect();
+  renderReStars(0);
+  addIngrRow(); addStepRow();
+  openModal('modal-resep');
+}
+function openEditResepModal(id) {
+  const r = DB.recipes.find(x=>x.id===id);
+  if(!r) return;
+  editResepId = id; reRating = r.rating||0;
+  document.getElementById('resep-modal-title').textContent = 'Edit Resep';
+  document.getElementById('re-name').value = r.name;
+  document.getElementById('re-time').value = r.time||'';
+  document.getElementById('re-cal').value = r.cal||'';
+  document.getElementById('re-serving').value = r.serving||'';
+  document.getElementById('re-tags').value = (r.tags||[]).join(', ');
+  document.getElementById('re-needs-prep').checked = r.needsPrep||false;
+  populateResepKatSelect(r.cat);
+  renderReStars(reRating);
+  if(r.photo) document.getElementById('re-foto-preview').innerHTML = `<img src="${r.photo}" style="max-height:120px;border-radius:8px;">`;
+  reIngrList = (r.ingr||[]).map(i=>({...i}));
+  reStepList = [...(r.steps||[])];
+  renderReIngr(); renderReSteps();
+  openModal('modal-resep');
+}
+function populateResepKatSelect(sel='') {
+  const s = document.getElementById('re-cat');
+  s.innerHTML = DB.kategoris.map(k=>`<option value="${k.name}" ${k.name===sel?'selected':''}>${k.emoji} ${k.name}</option>`).join('');
+}
+function setReRating(n) { reRating = n; renderReStars(n); }
+function renderReStars(n) {
+  document.querySelectorAll('#re-stars-input .star').forEach((s,i)=>{
+    s.classList.toggle('on', i<n);
+  });
+}
+function handleReFoto(e) {
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    document.getElementById('re-foto-preview').innerHTML = `<img src="${ev.target.result}" style="max-height:120px;border-radius:8px;">`;
+    document.getElementById('re-foto-area')._photoData = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function addIngrRow(qty='', unit='', name='') {
+  reIngrList.push({qty, unit, name});
+  renderReIngr();
+}
+function addStepRow(text='') {
+  reStepList.push(text);
+  renderReSteps();
+}
+function renderReIngr() {
+  document.getElementById('re-ingr-list').innerHTML = reIngrList.map((ingr,i)=>`
+    <div class="ingredient-row">
+      <input class="form-input qty-input" value="${esc(ingr.qty)}" placeholder="Qty" oninput="reIngrList[${i}].qty=this.value">
+      <input class="form-input unit-input" value="${esc(ingr.unit)}" placeholder="Satuan" oninput="reIngrList[${i}].unit=this.value">
+      <input class="form-input" value="${esc(ingr.name)}" placeholder="Nama bahan..." oninput="reIngrList[${i}].name=this.value">
+      <button class="btn btn-icon" onclick="reIngrList.splice(${i},1);renderReIngr()">✕</button>
+    </div>`).join('');
+}
+function renderReSteps() {
+  document.getElementById('re-steps-list').innerHTML = reStepList.map((s,i)=>`
+    <div class="step-row">
+      <div class="step-num">${i+1}</div>
+      <textarea class="form-textarea" style="min-height:46px" oninput="reStepList[${i}]=this.value">${esc(s)}</textarea>
+      <button class="btn btn-icon" onclick="reStepList.splice(${i},1);renderReSteps()">✕</button>
+    </div>`).join('');
+}
+function saveResep() {
+  const name = document.getElementById('re-name').value.trim();
+  const cat = document.getElementById('re-cat').value;
+  if(!name) return alert('Nama menu wajib diisi!');
+  const ingr = reIngrList.filter(i=>i.name.trim());
+  const steps = reStepList.filter(s=>s.trim());
+  const tags = document.getElementById('re-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const photoData = document.getElementById('re-foto-area')._photoData || (editResepId ? DB.recipes.find(r=>r.id===editResepId)?.photo : null);
+
+  const data = {
+    name, cat, emoji: katEmoji(cat),
+    time: document.getElementById('re-time').value,
+    cal: parseInt(document.getElementById('re-cal').value)||0,
+    serving: parseInt(document.getElementById('re-serving').value)||0,
+    rating: reRating, tags, needsPrep: document.getElementById('re-needs-prep').checked,
+    photo: photoData||null, ingr, steps
+  };
+  if(editResepId) {
+    const idx = DB.recipes.findIndex(r=>r.id===editResepId);
+    DB.recipes[idx] = {...DB.recipes[idx], ...data};
+  } else {
+    DB.recipes.push({id:genId(), ...data});
+  }
+  closeModal('modal-resep');
+  renderResep(); renderHome();
+  saveDB();
+}
+
+// ═══════════════════════════════════════════
+// KATEGORI
+// ═══════════════════════════════════════════
+function openKatModal() {
+  renderKatList();
+  openModal('modal-kat');
+}
+function renderKatList() {
+  document.getElementById('kat-list').innerHTML = DB.kategoris.map((k,i)=>`
+    <div class="kat-item">
+      <input class="kat-emoji-input" value="${k.emoji}" oninput="DB.kategoris[${i}].emoji=this.value">
+      <input class="kat-name-input" value="${k.name}" oninput="DB.kategoris[${i}].name=this.value">
+      <button class="btn btn-icon btn-sm" onclick="DB.kategoris.splice(${i},1);renderKatList()" title="Hapus">🗑</button>
+    </div>`).join('');
+}
+function addKat() {
+  const emoji = document.getElementById('new-kat-emoji').value.trim()||'🍽️';
+  const name = document.getElementById('new-kat-name').value.trim();
+  if(!name) return alert('Nama kategori wajib diisi!');
+  DB.kategoris.push({emoji, name});
+  document.getElementById('new-kat-name').value = '';
+  renderKatList();
+}
+function saveKat() { closeModal('modal-kat'); renderKatChips(); renderResep(); }
+
+// ═══════════════════════════════════════════
+// MASAK DARI BAHAN
+// ═══════════════════════════════════════════
+function bahan_keydown(e) { if(e.key==='Enter'||e.key===',') { e.preventDefault(); addBahan(); } }
+function addBahan() {
+  const v = document.getElementById('bahan-input').value;
+  const items = v.split(/[,\n]/).map(s=>s.trim()).filter(Boolean);
+  bahanList.push(...items);
+  document.getElementById('bahan-input').value = '';
+  renderBahanChips();
+}
+function removeBahan(i) { bahanList.splice(i,1); renderBahanChips(); }
+function renderBahanChips() {
+  document.getElementById('bahan-chips').innerHTML = bahanList.map((b,i)=>`
+    <div class="bahan-chip-item">${b}<button onclick="removeBahan(${i})">×</button></div>`).join('') ||
+    '<span style="color:var(--text-light);font-size:12px;font-weight:600;align-self:center">Tambahkan bahan di atas...</span>';
+}
+async function cariBahan() {
+  if(!bahanList.length) return alert('Tambahkan bahan terlebih dulu!');
+  if(!checkApiKey()) return;
+  document.getElementById('bahan-results').style.display = 'block';
+  const list = document.getElementById('bahan-list');
+  list.innerHTML = '<div class="ai-box ai-loading"><span class="spinner"></span> AI sedang mencari resep dari internet...</div>';
+
+  // Local matches first
+  const localMatches = DB.recipes.filter(r =>
+    r.ingr.some(ingr => bahanList.some(b => ingr.name.toLowerCase().includes(b.toLowerCase())))
+  );
+
+  try {
+    const resp = await callAI(`Aku punya bahan: ${bahanList.join(', ')}.
+Carikan 5 resep masakan yang bisa dibuat. Campurkan antara resep dari koleksi lokal dan ide baru dari pengetahuanmu.
+Untuk setiap resep, berikan format JSON array seperti ini (jangan ada teks lain, hanya JSON):
+[
+  {
+    "name": "Nama Masakan",
+    "emoji": "🍗",
+    "kategori": "Ayam & Daging",
+    "bahan_dipakai": ["bahan1","bahan2"],
+    "bahan_tambahan": ["bahan yang perlu beli"],
+    "waktu": "20 menit",
+    "ringkasan": "Deskripsi singkat 1 kalimat cara masak",
+    "bahan_lengkap": ["qty unit nama"],
+    "langkah": ["langkah 1","langkah 2","langkah 3","langkah 4"]
+  }
+]`);
+    let parsed = [];
+    try {
+      const clean = resp.replace(/```json|```/g,'').trim();
+      parsed = JSON.parse(clean);
+    } catch(e) { /* fallback */ }
+
+    let html = '';
+    if(localMatches.length) {
+      html += `<div class="sec-title" style="font-size:14px;margin-bottom:8px;">📖 Dari Koleksi Kamu</div>`;
+      html += localMatches.map(r=>`
+        <div class="bahan-result-card" onclick="openDetail(${r.id})">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:28px">${r.emoji}</span>
+            <div style="flex:1">
+              <div style="font-size:14px;font-weight:800;color:var(--deep-teal)">${r.name}</div>
+              <div style="font-size:12px;color:var(--text-light);margin-top:2px;">${r.cat} · ⏱ ${r.time}</div>
+            </div>
+            <span class="src-badge">Koleksi</span>
+          </div>
+        </div>`).join('');
+    }
+    if(parsed.length) {
+      html += `<div class="sec-title" style="font-size:14px;margin:14px 0 8px;">🤖 Saran dari AI</div>`;
+      html += parsed.map((item,i)=>`
+        <div class="bahan-result-card">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:28px">${item.emoji||'🍽️'}</span>
+            <div style="flex:1">
+              <div style="font-size:14px;font-weight:800;color:var(--deep-teal)">${item.name}</div>
+              <div style="font-size:12px;color:var(--text-light);margin-top:2px;">${item.kategori||''} · ⏱ ${item.waktu||'-'}</div>
+              <div style="font-size:12px;margin-top:4px;">${item.ringkasan||''}</div>
+              <div style="font-size:11px;margin-top:4px;"><span style="color:var(--mid-teal);font-weight:800">✅ Pakai:</span> ${(item.bahan_dipakai||[]).join(', ')}</div>
+              ${(item.bahan_tambahan||[]).length?`<div style="font-size:11px;"><span style="color:var(--coral);font-weight:800">+ Beli:</span> ${item.bahan_tambahan.join(', ')}</div>`:''}
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <span class="src-badge ai">AI</span>
+              <button class="btn btn-ghost btn-sm" onclick="saveAiRecipe(${i})">💾 Simpan</button>
+            </div>
+          </div>
+        </div>`).join('');
+      // Store for saving
+      window._aiRecipes = parsed;
+    }
+    if(!html) html = '<div style="padding:12px;font-size:13px;color:var(--text-light)">Tidak ditemukan resep yang cocok. Coba tambah bahan lain!</div>';
+    list.innerHTML = html;
+  } catch(e) {
+    list.innerHTML = '<div class="ai-box" style="color:var(--coral)">⚠️ Tidak dapat terhubung ke AI. Menampilkan dari koleksi saja.</div>' +
+      localMatches.map(r=>`<div class="bahan-result-card" onclick="openDetail(${r.id})">
+        <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:28px">${r.emoji}</span>
+        <div><div style="font-size:14px;font-weight:800;color:var(--deep-teal)">${r.name}</div>
+        <div style="font-size:12px;color:var(--text-light)">${r.cat}</div></div></div></div>`).join('');
+  }
+}
+function saveAiRecipe(idx) {
+  const item = window._aiRecipes[idx];
+  if(!item) return;
+  const ingr = (item.bahan_lengkap||[]).map(b=>{
+    const parts = b.split(' '); const qty=parts[0]||''; const unit=parts[1]||''; const name=parts.slice(2).join(' ');
+    return {qty,unit,name};
+  });
+  DB.recipes.push({ id:genId(), name:item.name, cat:item.kategori||'Lainnya', emoji:item.emoji||'🍽️',
+    time:item.waktu||'-', cal:0, serving:0, rating:0, tags:[], needsPrep:false, photo:null,
+    ingr: ingr.length ? ingr : [{qty:'',unit:'',name:'(dari AI — silakan edit)'}],
+    steps: item.langkah||['(dari AI — silakan edit)']
+  });
+  saveDB();
+  alert(`✅ "${item.name}" disimpan ke koleksi resep!`);
+}
+
+// ═══════════════════════════════════════════
+// IMPORT RESEP
+// ═══════════════════════════════════════════
+let importTab = 'link';
+function switchImportTab(tab, el) {
+  importTab = tab;
+  document.querySelectorAll('.import-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  ['link','text','foto'].forEach(t => document.getElementById('import-'+t+'-tab').style.display = t===tab?'block':'none');
+}
+function handleFotoImport(e) {
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    document.getElementById('import-foto-area').innerHTML = `<img src="${ev.target.result}" style="max-height:140px;border-radius:8px;">`;
+    document.getElementById('import-foto-area')._fotoData = {data: ev.target.result.split(',')[1], type: file.type};
+  };
+  reader.readAsDataURL(file);
+}
+async function doImport() {
+  if(!checkApiKey()) return;
+  document.getElementById('import-loading-card').style.display = 'block';
+  document.getElementById('import-result-card').style.display = 'none';
+
+  let prompt = '';
+  let messages = [];
+
+  if(importTab === 'foto') {
+    const fd = document.getElementById('import-foto-area')._fotoData;
+    if(!fd) { document.getElementById('import-loading-card').style.display='none'; return alert('Upload foto dulu!'); }
+    messages = [{
+      role:'user',
+      content:[
+        {type:'image',source:{type:'base64',media_type:fd.type,data:fd.data}},
+        {type:'text',text:`Baca resep dari foto/screenshot ini. Extract dan kembalikan HANYA JSON ini, tanpa teks lain:
+{
+  "name": "Nama Masakan",
+  "kategori": "Ayam & Daging",
+  "emoji": "🍗",
+  "waktu": "30 menit",
+  "kalori": 350,
+  "porsi": 4,
+  "bahan": [{"qty":"2","unit":"sdm","name":"kecap manis"}],
+  "langkah": ["Langkah 1","Langkah 2"]
+}`}
+      ]
+    }];
+  } else {
+    const url = document.getElementById('import-url').value.trim();
+    const text = document.getElementById('import-text-input').value.trim();
+    const src = url || text;
+    if(!src) { document.getElementById('import-loading-card').style.display='none'; return alert('Masukkan URL atau teks resep!'); }
+    prompt = `${url ? 'Dari URL resep: '+url+'\n' : ''}${text ? 'Teks/caption resep:\n'+text+'\n' : ''}
+Buat resep yang structured berdasarkan info di atas. Kembalikan HANYA JSON ini, tanpa markdown, tanpa teks lain:
+{
+  "name": "Nama Masakan",
+  "kategori": "Ayam & Daging",
+  "emoji": "🍗",
+  "waktu": "30 menit",
+  "kalori": 350,
+  "porsi": 4,
+  "bahan": [{"qty":"2","unit":"sdm","name":"kecap manis"},{"qty":"500","unit":"gram","name":"ayam potong"}],
+  "langkah": ["Langkah 1 detail","Langkah 2 detail","Langkah 3 detail"]
+}`;
+    messages = [{role:'user',content:prompt}];
+  }
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':DB.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,messages})
+    });
+    const data = await resp.json();
+    const raw = data.content?.[0]?.text || '';
+    const clean = raw.replace(/```json|```/g,'').trim();
+    const parsed = JSON.parse(clean);
+    importedRecipeData = parsed;
+    renderImportEditForm(parsed);
+    document.getElementById('import-result-card').style.display = 'block';
+  } catch(e) {
+    importedRecipeData = {name:'Resep Import',kategori:'Lainnya',emoji:'🍽️',waktu:'-',kalori:0,porsi:0,bahan:[],langkah:[]};
+    renderImportEditForm(importedRecipeData);
+    document.getElementById('import-result-card').style.display = 'block';
+  }
+  document.getElementById('import-loading-card').style.display = 'none';
+}
+
+function renderImportEditForm(d) {
+  // Store editable copy
+  window._importEdit = {
+    name: d.name||'',
+    kategori: d.kategori||'Lainnya',
+    emoji: d.emoji||'🍽️',
+    waktu: d.waktu||'-',
+    kalori: d.kalori||0,
+    porsi: d.porsi||0,
+    bahan: (d.bahan||[]).map(b=>({...b})),
+    langkah: [...(d.langkah||[])],
+    photo: null
+  };
+  const ie = window._importEdit;
+  const katOptions = DB.kategoris.map(k=>`<option value="${k.name}" ${k.name===ie.kategori?'selected':''}>${k.emoji} ${k.name}</option>`).join('');
+
+  let html = `
+    <div class="recipe-edit-grid">
+      <div><label class="form-label">Nama Menu</label><input class="form-input" id="ie-name" value="${esc(ie.name)}"></div>
+      <div><label class="form-label">Kategori</label><select class="form-select" id="ie-cat">${katOptions}</select></div>
+      <div><label class="form-label">Waktu</label><input class="form-input" id="ie-waktu" value="${esc(ie.waktu)}"></div>
+      <div><label class="form-label">Kalori</label><input class="form-input" id="ie-kalori" value="${ie.kalori}"></div>
+      <div class="full"><label class="form-label">Foto (opsional)</label>
+        <div class="photo-upload-area" onclick="document.getElementById('ie-foto').click()" id="ie-foto-area">
+          <div class="upload-hint">📷 Upload foto menu</div>
+        </div>
+        <input type="file" id="ie-foto" accept="image/*" style="display:none" onchange="handleIEFoto(event)">
+      </div>
+    </div>
+    <div class="sec-divider">🧂 Bahan-Bahan</div>
+    <div id="ie-ingr-list">`;
+  ie.bahan.forEach((b,i) => {
+    html += `<div class="ingredient-row">
+      <input class="form-input qty-input" value="${esc(b.qty)}" placeholder="Qty" oninput="window._importEdit.bahan[${i}].qty=this.value">
+      <input class="form-input unit-input" value="${esc(b.unit)}" placeholder="Satuan" oninput="window._importEdit.bahan[${i}].unit=this.value">
+      <input class="form-input" value="${esc(b.name)}" placeholder="Nama bahan" oninput="window._importEdit.bahan[${i}].name=this.value">
+      <button class="btn btn-icon" onclick="window._importEdit.bahan.splice(${i},1);renderImportEditForm(window._importEdit)">✕</button>
+    </div>`;
+  });
+  html += `</div>
+    <button class="add-row-btn" onclick="window._importEdit.bahan.push({qty:'',unit:'',name:''});renderImportEditForm(window._importEdit)">+ Tambah Bahan</button>
+    <div class="sec-divider">👨‍🍳 Langkah Masak</div>
+    <div id="ie-steps-list">`;
+  ie.langkah.forEach((s,i) => {
+    html += `<div class="step-row">
+      <div class="step-num">${i+1}</div>
+      <textarea class="form-textarea" style="min-height:46px" oninput="window._importEdit.langkah[${i}]=this.value">${esc(s)}</textarea>
+      <button class="btn btn-icon" onclick="window._importEdit.langkah.splice(${i},1);renderImportEditForm(window._importEdit)">✕</button>
+    </div>`;
+  });
+  html += `</div><button class="add-row-btn" onclick="window._importEdit.langkah.push('');renderImportEditForm(window._importEdit)">+ Tambah Langkah</button>`;
+  document.getElementById('import-edit-form').innerHTML = html;
+}
+function handleIEFoto(e) {
+  const file = e.target.files[0]; if(!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    window._importEdit.photo = ev.target.result;
+    document.getElementById('ie-foto-area').innerHTML = `<img src="${ev.target.result}" style="max-height:120px;border-radius:8px;">`;
+  };
+  r.readAsDataURL(file);
+}
+function saveImported() {
+  if(!window._importEdit) return;
+  const ie = window._importEdit;
+  ie.name = document.getElementById('ie-name')?.value || ie.name;
+  ie.kategori = document.getElementById('ie-cat')?.value || ie.kategori;
+  ie.waktu = document.getElementById('ie-waktu')?.value || ie.waktu;
+  ie.kalori = parseInt(document.getElementById('ie-kalori')?.value)||0;
+  DB.recipes.push({
+    id:genId(), name:ie.name, cat:ie.kategori, emoji:katEmoji(ie.kategori),
+    time:ie.waktu, cal:ie.kalori, serving:ie.porsi||0, rating:0, tags:[], needsPrep:false,
+    photo:ie.photo||null, ingr:ie.bahan.filter(b=>b.name.trim()), steps:ie.langkah.filter(s=>s.trim())
+  });
+  alert(`✅ "${ie.name}" berhasil disimpan ke koleksi!`);
+  document.getElementById('import-result-card').style.display = 'none';
+  document.getElementById('import-url').value = '';
+  document.getElementById('import-text-input').value = '';
+  saveDB(); renderResep(); renderHome();
+}
+
+// ═══════════════════════════════════════════
+// GROCERY
+// ═══════════════════════════════════════════
+function renderGrocery() {
+  // Grocery list
+  const list = document.getElementById('grocery-list');
+  list.innerHTML = DB.grocery.map((g,i)=>`
+    <div class="grocery-item ${g.checked?'checked':''}">
+      <input type="checkbox" ${g.checked?'checked':''} onchange="toggleGrocery(${i})">
+      <span class="g-name" onclick="toggleGrocery(${i})">${g.name}</span>
+      <span class="g-qty">${g.qty}</span>
+      <button class="g-del" onclick="DB.grocery.splice(${i},1);renderGrocery()">✕</button>
+    </div>`).join('') || '<div style="color:var(--text-light);font-size:13px;padding:8px">Daftar belanja kosong.</div>';
+
+  // Inventory
+  renderInventory();
+  document.getElementById('stat-grocery').textContent = DB.grocery.filter(g=>!g.checked).length;
+}
+function toggleGrocery(i) { DB.grocery[i].checked = !DB.grocery[i].checked; saveDB(); renderGrocery(); }
+function addGroceryManual() {
+  const name = document.getElementById('grocery-name-input').value.trim();
+  const qty = document.getElementById('grocery-qty-input').value.trim();
+  if(!name) return alert('Nama item wajib diisi!');
+  DB.grocery.push({id:genId(), name, qty:qty||'-', checked:false, manual:true});
+  document.getElementById('grocery-name-input').value = '';
+  document.getElementById('grocery-qty-input').value = '';
+  saveDB();
+  renderGrocery();
+}
+function filterInv(f, el) {
+  invFilter = f;
+  document.querySelectorAll('#pg-grocery .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderInventory();
+}
+function renderInventory() {
+  let list = DB.inventory;
+  if(invFilter !== 'all') list = list.filter(i=>i.loc===invFilter);
+  document.getElementById('inventory-list').innerHTML = list.map((item,i)=>`
+    <div class="inv-item">
+      <span class="inv-name">${item.name}</span>
+      <input class="inv-qty-input" value="${item.qty}" oninput="updateInvQty(${item.id},this.value)" title="Edit jumlah">
+      <span class="inv-unit">${item.unit}</span>
+      <span class="inv-status ${item.qty==0||item.qty=='0'?'inv-out':parseFloat(item.qty)<2?'inv-low':'inv-ok'}">${item.qty==0||item.qty=='0'?'❌ Habis':parseFloat(item.qty)<2?'⚠️ Hampir habis':'✅ OK'}</span>
+      <button class="btn btn-icon btn-sm" onclick="delInvItem(${item.id})">🗑</button>
+    </div>`).join('');
+}
+function updateInvQty(id, val) {
+  const item = DB.inventory.find(i=>i.id===id);
+  if(item) { item.qty = val; saveDB(); renderInventory(); }
+}
+function delInvItem(id) { DB.inventory = DB.inventory.filter(i=>i.id!==id); saveDB(); renderInventory(); }
+function addInvItem() {
+  const name = document.getElementById('inv-name').value.trim();
+  const qty = document.getElementById('inv-qty').value.trim();
+  const unit = document.getElementById('inv-unit').value.trim();
+  const loc = document.getElementById('inv-loc').value;
+  if(!name) return alert('Nama bahan wajib diisi!');
+  DB.inventory.push({id:genId(), name, qty:qty||'0', unit:unit||'buah', loc});
+  ['inv-name','inv-qty','inv-unit'].forEach(id=>document.getElementById(id).value='');
+  saveDB();
+  renderInventory();
+}
+
+// ═══════════════════════════════════════════
+// RIWAYAT
+// ═══════════════════════════════════════════
+function logCook(name) {
+  const today = new Date().toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+  DB.cookLog.unshift({name, date:today, slot:'Manual'});
+  saveDB();
+  document.getElementById('stat-log').textContent = DB.cookLog.length;
+}
+function renderLog() {
+  const el = document.getElementById('log-list');
+  if(!DB.cookLog.length) {
+    el.innerHTML = '<div style="color:var(--text-light);font-size:13px;font-weight:600;padding:12px 0">Belum ada riwayat masak.</div>';
+    return;
+  }
+  el.innerHTML = DB.cookLog.map(log=>`
+    <div class="log-item">
+      <div class="log-date">${log.date}</div>
+      <div class="log-menu">${log.name}</div>
+      <div class="log-slot">${log.slot||''}</div>
+    </div>`).join('');
+}
+function clearLog() { if(confirm('Hapus semua riwayat?')) { DB.cookLog=[]; saveDB(); renderLog(); } }
+
+// ═══════════════════════════════════════════
+// RANDOM MEAL PLAN
+// ═══════════════════════════════════════════
+function openRandomModal() { openModal('modal-random'); document.getElementById('random-result').style.display='none'; document.getElementById('random-save-btn').style.display='none'; }
+async function doRandom() {
+  if(!checkApiKey()) return;
+  const note = document.getElementById('random-note').value;
+  const withDouble = document.getElementById('opt-double').checked;
+  const el = document.getElementById('random-ai-text');
+  document.getElementById('random-result').style.display = 'block';
+  el.className = 'ai-box ai-loading';
+  el.innerHTML = '<span class="spinner"></span> AI sedang generate meal plan...';
+
+  const menuList = DB.recipes.map(r=>r.name).join(', ');
+  const prompt = `Buatkan meal plan mingguan (Senin-Minggu) untuk Sarapan, Siang, Malam, Snack.
+Preferensi: ${note||'tidak ada preferensi khusus'}
+Koleksi menu tersedia: ${menuList}
+${withDouble?'Tandai 2-3 menu dengan [×2] yang sebaiknya dimasak sekali untuk 2 hari berbeda (bukan berurutan).':''}
+
+Format tabel markdown sederhana:
+| Hari | Sarapan | Siang | Malam | Snack |
+Gunakan menu dari koleksi jika cocok, atau saran menu baru. Bahasa Indonesia santai.`;
+
+  try {
+    const text = await callAI(prompt);
+    el.className = 'ai-box';
+    el.innerHTML = text.replace(/\n/g,'<br>');
+    document.getElementById('random-save-btn').style.display = 'inline-flex';
+    window._randomPlanText = text;
+  } catch(e) {
+    el.className = 'ai-box';
+    el.innerHTML = e.message === 'NO_API_KEY'
+      ? '🔑 API Key belum diset. Klik ikon ⚙️ di sidebar untuk mengatur.'
+      : '⚠️ Tidak dapat terhubung ke AI: ' + e.message;
+  }
+}
+
+function saveRandomPlan() {
+  const text = window._randomPlanText;
+  if(!text) return;
+
+  const wk = DB.mealPlan[currentWeek] = DB.mealPlan[currentWeek] || {};
+  const dayMap = {
+    'senin':'sen','selasa':'sel','rabu':'rab','kamis':'kam',
+    'jumat':'jum','sabtu':'sab','minggu':'min'
+  };
+  const slotMap = {
+    'sarapan':'sarapan','makan siang':'siang','siang':'siang',
+    'makan malam':'malam','malam':'malam','snack':'snack','cemilan':'snack'
+  };
+
+  // Parse markdown table rows: | Hari | Sarapan | Siang | Malam | Snack |
+  const lines = text.split('\n').filter(l => l.trim().startsWith('|') && !l.includes('---'));
+  let headerParsed = false;
+  let colOrder = ['sarapan','siang','malam','snack']; // default order
+
+  lines.forEach(line => {
+    const cells = line.split('|').map(c=>c.trim()).filter(Boolean);
+    if(!cells.length) return;
+
+    // Detect header row
+    const firstLower = cells[0].toLowerCase();
+    if(firstLower === 'hari' || firstLower === 'day') {
+      colOrder = cells.slice(1).map(c => {
+        const cl = c.toLowerCase();
+        return Object.entries(slotMap).find(([k])=>cl.includes(k))?.[1] || cl;
+      });
+      headerParsed = true;
+      return;
+    }
+
+    const dayKey = dayMap[firstLower];
+    if(!dayKey) return;
+
+    cells.slice(1).forEach((cell, ci) => {
+      const slotKey = colOrder[ci];
+      if(!slotKey || cell === '—' || cell === '-' || !cell) return;
+      // Split multiple menus by / or newline
+      const menus = cell.split(/[\/\n]/).map(m => m.replace(/\[×2\]/g,'').replace(/×2/g,'').trim()).filter(Boolean);
+      menus.forEach(menuName => {
+        if(!menuName || menuName.length < 2) return;
+        const fullKey = dayKey + '_' + slotKey;
+        wk[fullKey] = wk[fullKey] || [];
+        const isDouble = cell.includes('×2') || cell.includes('[×2]');
+        // Check if already exists
+        if(!wk[fullKey].find(x=>x.name===menuName)) {
+          const matchRecipe = DB.recipes.find(r=>r.name.toLowerCase()===menuName.toLowerCase());
+          wk[fullKey].push({ name: menuName, id: matchRecipe?.id||null, isDouble, isReuseOf: false });
+        }
+      });
+    });
+  });
+
+  saveDB();
+  closeModal('modal-random');
+  renderPlanner();
+  alert('✅ Meal plan berhasil disimpan ke planner minggu ini!');
+}
+
+// ═══════════════════════════════════════════
+// EXPORT
+// ═══════════════════════════════════════════
+function exportPlan() {
+  const monDate = weekStartFromKey(currentWeek);
+  const wk = DB.mealPlan[currentWeek] || {};
+  let html = `<div style="font-family:'Fredoka One',cursive;font-size:18px;color:#215a6c;margin-bottom:12px;">🍳 Meal Plan ${fmtDate(monDate)} – ${fmtDate(addDays(monDate,6))}</div>`;
+  html += `<table style="width:100%;border-collapse:collapse;font-size:12px;">`;
+  html += `<tr><th style="padding:6px;background:#215a6c;color:white;border-radius:4px;">Waktu</th>`;
+  DAYS_ID.forEach(d => html += `<th style="padding:6px;background:#215a6c;color:white;">${d}</th>`);
+  html += '</tr>';
+  SLOT_DEFS.forEach(slot => {
+    html += `<tr><td style="padding:6px;font-weight:800;color:#478a86;white-space:nowrap">${slot.label}</td>`;
+    DAY_KEYS.forEach(dk => {
+      const items = wk[dk+'_'+slot.key]||[];
+      html += `<td style="padding:6px;border:1px solid #e0eeed;vertical-align:top;">${items.map(i=>i.name).join('<br>')||'—'}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</table>';
+  document.getElementById('export-preview').innerHTML = html;
+  openModal('modal-export');
+}
+function doPrint() { window.print(); }
+function copyPlanText() {
+  const wk = DB.mealPlan[currentWeek] || {};
+  let txt = `Meal Plan Minggu Ini\n${'='.repeat(30)}\n`;
+  DAYS_ID.forEach((d,i) => {
+    txt += `\n${d}:\n`;
+    SLOT_DEFS.forEach(slot => {
+      const items = wk[DAY_KEYS[i]+'_'+slot.key]||[];
+      if(items.length) txt += `  ${slot.label}: ${items.map(x=>x.name).join(', ')}\n`;
+    });
+  });
+  navigator.clipboard.writeText(txt).then(()=>alert('Copied ke clipboard!'));
+}
+
+// ═══════════════════════════════════════════
+// FAB
+// ═══════════════════════════════════════════
+function fabAction() {
+  const map = { home:()=>nav('import'), planner:()=>openRandomModal(), resep:()=>openAddResepModal(),
+    bahan:()=>document.getElementById('bahan-input').focus(), import:()=>document.getElementById('import-url').focus(),
+    grocery:()=>document.getElementById('grocery-name-input').focus(), riwayat:()=>nav('planner') };
+  (map[currentPage]||map.home)();
+}
+
+// ═══════════════════════════════════════════
+// AI HELPER
+// ═══════════════════════════════════════════
+async function callAI(prompt, messages) {
+  const key = DB.apiKey;
+  if(!key) throw new Error('NO_API_KEY');
+  const body = messages
+    ? {model:'claude-sonnet-4-20250514', max_tokens:1500, messages}
+    : {model:'claude-sonnet-4-20250514', max_tokens:1500, messages:[{role:'user',content:prompt}]};
+  const resp = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify(body)
+  });
+  if(!resp.ok) { const err = await resp.json(); throw new Error(err.error?.message||'API Error'); }
+  const data = await resp.json();
+  return data.content?.[0]?.text || '';
+}
+
+// ═══════════════════════════════════════════
+// LOCALSTORAGE PERSISTENCE
+// ═══════════════════════════════════════════
+function saveDB() {
+  try {
+    const toSave = { mealPlan: DB.mealPlan, grocery: DB.grocery, inventory: DB.inventory, cookLog: DB.cookLog,
+      recipes: DB.recipes, kategoris: DB.kategoris, nextId: DB.nextId, apiKey: DB.apiKey };
+    localStorage.setItem('dapurPintar_v2', JSON.stringify(toSave));
+  } catch(e) { console.warn('LocalStorage save failed', e); }
+}
+function loadDB() {
+  try {
+    const saved = localStorage.getItem('dapurPintar_v2');
+    if(saved) {
+      const parsed = JSON.parse(saved);
+      Object.assign(DB, parsed);
+    }
+  } catch(e) { console.warn('LocalStorage load failed', e); }
+}
+
+// ═══════════════════════════════════════════
+// API KEY SETTINGS
+// ═══════════════════════════════════════════
+function openApiKeyModal() {
+  const current = DB.apiKey ? '••••••••'+DB.apiKey.slice(-6) : '';
+  const key = prompt(`🔑 Masukkan Anthropic API Key kamu:\n(Dapatkan di: console.anthropic.com)\n\nKey saat ini: ${current||'Belum diset'}\n\nKetik key baru, atau kosongkan untuk tidak mengubah:`);
+  if(key && key.trim()) {
+    DB.apiKey = key.trim();
+    saveDB();
+    alert('✅ API Key tersimpan! Fitur AI sudah bisa digunakan.');
+  }
+}
+function checkApiKey() {
+  if(!DB.apiKey) {
+    const ok = confirm('⚠️ API Key belum diset!\n\nUntuk menggunakan fitur AI, kamu perlu:\n1. Buat akun di console.anthropic.com\n2. Generate API key\n3. Masukkan di sini\n\nKlik OK untuk input API key sekarang.');
+    if(ok) openApiKeyModal();
+    return false;
+  }
+  return true;
+}
+
+// ═══════════════════════════════════════════
+// MODAL CLICK OUTSIDE
+// ═══════════════════════════════════════════
+document.querySelectorAll('.modal-overlay').forEach(m=>{
+  m.addEventListener('click',e=>{ if(e.target===m) m.classList.remove('open'); });
+});
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+loadDB();
+renderHome();
+</script>
+</body>
+</html>
